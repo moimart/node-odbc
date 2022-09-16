@@ -35,6 +35,7 @@ Napi::Object ODBCStatement::Init(Napi::Env env, Napi::Object exports) {
     InstanceMethod("bind", &ODBCStatement::Bind),
     InstanceMethod("execute", &ODBCStatement::Execute),
     InstanceMethod("close", &ODBCStatement::Close),
+    InstanceMethod("cancel", &ODBCStatement::Cancel),
   });
 
   // Attach the Database Constructor to the target object
@@ -597,6 +598,55 @@ class CloseStatementAsyncWorker : public ODBCAsyncWorker {
 };
 
 Napi::Value ODBCStatement::Close(const Napi::CallbackInfo& info) {
+
+  Napi::Env env = info.Env();
+  Napi::HandleScope scope(env);
+
+  Napi::Function callback = info[0].As<Napi::Function>();
+
+  CloseStatementAsyncWorker *worker = new CloseStatementAsyncWorker(this, callback);
+  worker->Queue();
+
+  return env.Undefined();
+}
+
+class CancelStatementAsyncWorker : public ODBCAsyncWorker {
+
+  private:
+    ODBCStatement *odbcStatement;
+    StatementData *data;
+
+    void Execute() {
+
+      SQLRETURN return_code;
+
+      return_code = SQLCancel(data->hstmt);
+      if (!SQL_SUCCEEDED(return_code)) {
+        this->errors = GetODBCErrors(SQL_HANDLE_STMT, data->hstmt);
+        SetError("[odbc] Error canceling the Statement\0");
+        return;
+      }
+    }
+
+    void OnOK() {
+
+      Napi::Env env = Env();
+      Napi::HandleScope scope(env);
+
+      std::vector<napi_value> callbackArguments;
+      callbackArguments.push_back(env.Null());
+      Callback().Call(callbackArguments);
+    }
+
+  public:
+    CancelStatementAsyncWorker(ODBCStatement *odbcStatement, Napi::Function& callback) : ODBCAsyncWorker(callback),
+      odbcStatement(odbcStatement),
+      data(odbcStatement->data) {}
+
+    ~CancelStatementAsyncWorker() {}
+};
+
+Napi::Value ODBCStatement::Cancel(const Napi::CallbackInfo& info) {
 
   Napi::Env env = info.Env();
   Napi::HandleScope scope(env);
