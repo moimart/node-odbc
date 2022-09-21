@@ -261,7 +261,7 @@ class BindAsyncWorker : public ODBCAsyncWorker {
 
 Napi::Value ODBCStatement::Bind(const Napi::CallbackInfo& info) {
 
-  Napi::Env env = info.Env(); 
+  Napi::Env env = info.Env();
   Napi::HandleScope scope(env);
 
   if ( !info[0].IsArray() || !info[1].IsFunction() ) {
@@ -462,7 +462,7 @@ class ExecuteAsyncWorker : public ODBCAsyncWorker {
           this->odbcStatement->napiParameters.Value(),
           Napi::Boolean::New(env, false)
         };
-  
+
         // create a new ODBCCursor object as a Napi::Value
         Napi::Value cursorObject = ODBCCursor::constructor.New(cursor_arguments);
 
@@ -653,7 +653,7 @@ Napi::Value ODBCStatement::Cancel(const Napi::CallbackInfo& info) {
 
   Napi::Function callback = info[0].As<Napi::Function>();
 
-  CloseStatementAsyncWorker *worker = new CloseStatementAsyncWorker(this, callback);
+  CancelStatementAsyncWorker *worker = new CancelStatementAsyncWorker(this, callback);
   worker->Queue();
 
   return env.Undefined();

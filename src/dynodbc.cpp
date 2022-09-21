@@ -150,7 +150,7 @@ BOOL DynLoadODBC( char* odbcModuleName )
   //Unused-> if (LOAD_ENTRY( hMod, SQLDataSources    )  )
 //#endif
   //Unused-> if (LOAD_ENTRY( hMod, SQLBindCol        )  )
-  //Unused-> if (LOAD_ENTRY( hMod, SQLCancel         )  )
+  if (LOAD_ENTRY( hMod, SQLCancel         )  )
   //Unused-> if (LOAD_ENTRY( hMod, SQLConnect       )  )
   //Unused-> if (LOAD_ENTRY( hMod, SQLDescribeCol    )  )
   if (LOAD_ENTRY( hMod, SQLDisconnect     )  )
