@@ -15,6 +15,12 @@
   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <thread>
+#include <unistd.h>
+
 #include <napi.h>
 #include <time.h>
 #include <string>
@@ -621,6 +627,8 @@ class CancelStatementAsyncWorker : public ODBCAsyncWorker {
       SQLRETURN return_code;
 
       return_code = SQLCancel(data->hstmt);
+      std::cout << "SQLCancel return code: " << return_code << std::endl;
+
       if (!SQL_SUCCEEDED(return_code)) {
         this->errors = GetODBCErrors(SQL_HANDLE_STMT, data->hstmt);
         SetError("[odbc] Error canceling the Statement\0");
