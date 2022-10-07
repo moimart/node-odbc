@@ -65,6 +65,7 @@ pfnSQLAllocEnv          pSQLAllocEnv;
 pfnSQLAllocStmt         pSQLAllocStmt;
 pfnSQLBindCol           pSQLBindCol;
 pfnSQLCancel            pSQLCancel;
+pfnSQLCancelHandle      pSQLCancelHandle;
 pfnSQLColAttributes     pSQLColAttributes;
 pfnSQLConnect           pSQLConnect;
 pfnSQLDescribeCol       pSQLDescribeCol;
@@ -151,6 +152,7 @@ BOOL DynLoadODBC( char* odbcModuleName )
 //#endif
   //Unused-> if (LOAD_ENTRY( hMod, SQLBindCol        )  )
   if (LOAD_ENTRY( hMod, SQLCancel         )  )
+  if (LOAD_ENTRY( hMod, SQLCancelHandle   )  )
   //Unused-> if (LOAD_ENTRY( hMod, SQLConnect       )  )
   //Unused-> if (LOAD_ENTRY( hMod, SQLDescribeCol    )  )
   if (LOAD_ENTRY( hMod, SQLDisconnect     )  )

@@ -44,6 +44,10 @@ typedef RETCODE (SQL_API * pfnSQLBindCol)(
 typedef RETCODE (SQL_API * pfnSQLCancel)(
   HSTMT       hstmt);
 
+typedef RETCODE (SQL_API * pfnSQLCancelHandle)(
+  SQLSMALLINT HandleType,
+  HSTMT       hstmt);
+
 typedef RETCODE (SQL_API * pfnSQLColAttributes)(
   HSTMT       hstmt,
   UWORD       icol,
@@ -303,6 +307,7 @@ extern pfnSQLAllocEnv           pSQLAllocEnv;
 extern pfnSQLAllocStmt          pSQLAllocStmt;
 extern pfnSQLBindCol            pSQLBindCol;
 extern pfnSQLCancel             pSQLCancel;
+extern pfnSQLCancelHandle       pSQLCancelHandle;
 extern pfnSQLColAttributes      pSQLColAttributes;
 extern pfnSQLConnect            pSQLConnect;
 extern pfnSQLDescribeCol        pSQLDescribeCol;
@@ -316,7 +321,7 @@ extern pfnSQLGetDiagField       pSQLGetDiagField;
 extern pfnSQLFreeHandle         pSQLFreeHandle;
 extern pfnSQLFetchScroll        pSQLFetchScroll;
 extern pfnSQLFetchScroll        pSQLFetchScroll;
-extern pfnSQLColAttribute       pSQLColAttribute; 
+extern pfnSQLColAttribute       pSQLColAttribute;
 extern pfnSQLSetConnectAttr     pSQLSetConnectAttr;
 extern pfnSQLDriverConnect      pSQLDriverConnect;
 extern pfnSQLAllocHandle        pSQLAllocHandle;
@@ -380,5 +385,6 @@ BOOL DynLoadODBC( char* odbcModuleName );
 #define SQLPrimaryKeys pSQLPrimaryKeys
 #define SQLSetEnvAttr pSQLSetEnvAttr
 #define SQLCancel pSQLCancel
+#define SQLCancelHandle pSQLCancelHandle
 #endif
 #endif // _SRC_DYNODBC_H_
