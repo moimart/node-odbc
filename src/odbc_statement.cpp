@@ -626,8 +626,8 @@ class CancelStatementAsyncWorker : public ODBCAsyncWorker {
 
       SQLRETURN return_code;
 
-      return_code = SQLCancel(data->hstmt);
       std::cout << "SQLCancel return code: " << return_code << std::endl;
+      return_code = SQLCancelHandle(SQL_HANDLE_STMT, data->hstmt);
 
       if (!SQL_SUCCEEDED(return_code)) {
         this->errors = GetODBCErrors(SQL_HANDLE_STMT, data->hstmt);
