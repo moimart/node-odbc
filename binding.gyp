@@ -9,7 +9,7 @@
         'src/odbc_cursor.cpp',
         'src/dynodbc.cpp'
       ],
-      'cflags' : ['-Wall', '-Wextra', '-Wno-unused-parameter', '-DNAPI_DISABLE_CPP_EXCEPTIONS'],
+      'cflags' : ['-Wall', '-Wextra', '-Wno-unused-parameter', '-DNAPI_CPP_EXCEPTIONS', '-fexceptions'],
       'include_dirs': [
         '<!@(node -p "require(\'node-addon-api\').include")'
       ],
@@ -31,22 +31,28 @@
             [ 'target_arch=="arm64"', {
               'include_dirs': [
                 '/opt/homebrew/include'
-              ],  
+              ],
               'libraries' : [
                 '-L/opt/homebrew/lib',
                 '-lodbc'
-              ],  
+              ],
             }], ['target_arch=="x64"', {
               'include_dirs': [
                 '/usr/local/include',
-              ],  
+              ],
               'libraries' : [
                 '-L/usr/local/lib',
                 '-lodbc'
               ],
             }],
           ],
-          'defines': [ 'NAPI_DISABLE_CPP_EXCEPTIONS', 'NAPI_EXPERIMENTAL' ]
+          "xcode_settings": {
+            "OTHER_CPLUSPLUSFLAGS": [
+              "-frtti",
+              "-fexceptions"
+            ]
+          },
+          'defines': [ 'NAPI_CPP_EXCEPTIONS', 'NAPI_EXPERIMENTAL' ]
         }],
         [ 'OS == "freebsd"', {
           'include_dirs': [
