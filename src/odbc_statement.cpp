@@ -116,6 +116,8 @@ class PrepareAsyncWorker : public ODBCAsyncWorker {
 
     void Execute() {
 
+      std::cout << "[odbc_statement.cpp] Executing statement..." << std::endl;
+
       SQLRETURN return_code;
 
       return_code = SQLPrepare
@@ -626,10 +628,11 @@ class CancelStatementAsyncWorker : public ODBCAsyncWorker {
 
       SQLRETURN return_code;
 
-      std::cout << "SQLCancel return code: " << return_code << std::endl;
       return_code = SQLCancelHandle(SQL_HANDLE_STMT, data->hstmt);
+      std::cout << "[odbc_statement.cpp] SQLCancelHandle return code: " << return_code << std::endl;
 
       if (!SQL_SUCCEEDED(return_code)) {
+        std::cout << "[odbc_statement.cpp] Error running SQLCancelHandle" << std::endl;
         this->errors = GetODBCErrors(SQL_HANDLE_STMT, data->hstmt);
         SetError("[odbc] Error canceling the Statement\0");
         return;
